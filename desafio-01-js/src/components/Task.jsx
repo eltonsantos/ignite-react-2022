@@ -2,21 +2,25 @@ import { Trash } from "phosphor-react";
 
 import styles from './Task.module.css';
 
-export function Task({ id, title, isCompleted }) {
+export function Task({ id, title, isCompleted, onDeleteTask }) {
+  console.log(id)
 
-  console.log(id);
+  function handleToggleTask(id) {
+    // setStatus(!isCompleted)
+    // console.log(!status)
+  }
 
-  function toggleTodo() {}
-
-  function removeTodo() {}
+  function handleRemoveTask(id) {
+    onDeleteTask(id)
+  }
   
   return (
     <div key={id} className={styles.todoList}>
       <span className="todoCheck">
-        <input type="checkbox" onClick={toggleTodo} />
+        <input type="checkbox" onClick={() => handleToggleTask(id)} />
       </span>
       <p>{title}</p>
-      <button title="Deletar todo" onClick={removeTodo}>
+      <button title="Deletar todo" onClick={() => handleRemoveTask(id)}>
         <Trash weight="fill" />
       </button>
     </div>

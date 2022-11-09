@@ -8,7 +8,7 @@ import styles from './App.module.css';
 
 import './global.css';
 
-const tasks = [
+const initialTasks = [
   {
     id: uuidv4(),
     title: "Trabalhar",
@@ -31,40 +31,56 @@ export function App() {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
 
-  function addNewTodo(event) {
+  function handleNewTaskChange(event) {
+    setNewTask(event.target.value);
+  }
+
+  function handleCreateNewTask(event) {
     event.preventDefault();
-    setTasks([...tasks, {
+
+    if(!newTask) return;
+    
+    const taskNew = {
       id: uuidv4(),
       title: newTask,
       isCompleted: false
-    }])
-    setNewTask('')
+    }
 
-    console.log(tasks, newTask)
+    setTasks([...tasks, taskNew]);
 
+    setNewTask('');
+  }
+
+  function onDeleteTask(id) {
+    const filteredTasks = tasks.filter(task => task.id !== id);
+    setTasks(filteredTasks);
   }
 
   return (
     <div className="App">
       <Header />
       <div className={styles.todoForm}>
-        <form onSubmit={addNewTodo}>
-          <input type="text" />
-          <button>Criar</button>
+        <form onSubmit={handleCreateNewTask}>
+          <input type="text" onChange={handleNewTaskChange} value={newTask} />
+          <button>Create</button>
         </form>
       </div>
       <div className={styles.todoWrapper}>
         <div className={styles.todoTexts}>
-          <div className="todoCreated">aaaaa</div>
-          <div className="todoDone">bbbbbb</div>
+          <div className="todoCreated">Ctreated: {tasks.length}</div>
+          <div className="todoDone">Done: { tasks.status = true}</div>
         </div>
         <hr />
 
-        { tasks.map(task => {
-          return(
-            <Task key={task.id} id={task.id} title={task.title} isCompleted={task.isCompleted} />
-          )
-        } )}
+        { tasks.length > 0 ? (
+          tasks.map(task => {
+            return(
+              <Task key={task.id} id={task.id} title={task.title} isCompleted={task.isCompleted} onDeleteTask={onDeleteTask} />
+            )
+          } )
+        ) : (
+          <div>No one task created</div>
+        )}
       
       </div>
     </div>
