@@ -1,7 +1,7 @@
-import { FormEvent, useState } from "react";
-import { Trash } from "phosphor-react";
+import { ChangeEvent, FormEvent, HTMLInputTypeAttribute, useState } from "react";
 
 import { Header } from "./components/Header";
+import { Task } from "./components/Task";
 
 import styles from './App.module.css';
 
@@ -9,13 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import './global.css';
 
-interface Todo {
-  id: string;
-  title: string;
-  isCompleted: boolean;
-}
-
-const initialTodos = [
+const initialTasks = [
   {
     id: uuidv4(),
     title: 'Estudar',
@@ -35,54 +29,69 @@ const initialTodos = [
 
 export function App() {
 
-  const [todos, setTodos] = useState(initialTodos);
-  const [newTodo, setNewTodo] = useState('');
+  const [tasks, setTasks] = useState(initialTasks);
+  const [newTask, setNewTask] = useState('');
 
-  function addNewTodo(event: FormEvent) {
-    event.preventDefault();
-    setTodos([...todos, {
-        id: uuidv4(),
-        title: newTodo,
-        isCompleted: false
-    }]);
-    setNewTodo('');
+  function handleNewTaskChange(event: ChangeEvent<HTMLInputElement>) {
+    setNewTask(event.target.value);
   }
 
-  function toggleTodo() {}
+  function handleCreateNewTask(event: FormEvent) {
+    event.preventDefault();
 
-  function removeTodo() {}
+    if(!newTask) return;
+    
+    const taskNew = {
+      id: uuidv4(),
+      title: newTask,
+      isCompleted: false
+    }
+
+    setTasks([...tasks, taskNew]);
+
+    setNewTask('');
+  }
+
+  function onDeleteTask(id: string) {
+    const filteredTasks = tasks.filter(task => task.id !== id);
+    setTasks(filteredTasks);
+  }
+
+  function onToggleTask(id: string) {
+    const tasksChanged = tasks.map(task => task.id === id ? {
+      ...task,
+      isCompleted: !task.isCompleted
+    } : task)
+    setTasks(tasksChanged)
+    console.log(tasksChanged)
+  }
 
   return (
     <div className="App">
       <Header />
       <div className={styles.todoForm}>
-        <form onSubmit={addNewTodo}>
-          <input type="text" />
+        <form onSubmit={handleCreateNewTask}>
+          <input type="text" onChange={handleNewTaskChange} value={newTask} />
           <button>Criar</button>
         </form>
       </div>
       <div className={styles.todoWrapper}>
         <div className={styles.todoTexts}>
-          <div className="todoCreated">aaaaa</div>
-          <div className="todoDone">bbbbbb</div>
+          <div className="todoCreated">Created: {tasks.length}</div>
+          <div className="todoDone">Done: {tasks.filter(task => task.isCompleted).length}</div>
         </div>
         <hr />
 
-        { todos.map(todo => {
-          return(
-            <div key={todo.id} className={styles.todoList}>
-              <span className="todoCheck">
-                <input type="checkbox" onClick={toggleTodo} />
-              </span>
-              <p>{todo.title}</p>
-              <button title="Deletar todo" onClick={removeTodo}>
-                <Trash weight="fill" />
-              </button>
-            </div>
-          )
-        } )}
+        { tasks.length > 0 ? (
+          tasks.map(task => {
+            return(
+              <Task key={task.id} id={task.id} title={task.title} isCompleted={task.isCompleted} onToggleTask={onToggleTask} onDeleteTask={onDeleteTask} />
+            )
+          } )
+        ) : (
+          <div>No one task created</div>
+        )}
         
-
       </div>
     </div>
   )

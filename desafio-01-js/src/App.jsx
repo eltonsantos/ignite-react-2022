@@ -12,12 +12,12 @@ const initialTasks = [
   {
     id: uuidv4(),
     title: "Trabalhar",
-    isCompleted: false,
+    isCompleted: true,
   },
   {
     id: uuidv4(),
     title: "Estudar",
-    isCompleted: false,
+    isCompleted: true,
   },
   {
     id: uuidv4(),
@@ -28,7 +28,7 @@ const initialTasks = [
 
 export function App() {
 
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(initialTasks);
   const [newTask, setNewTask] = useState('');
 
   function handleNewTaskChange(event) {
@@ -56,6 +56,19 @@ export function App() {
     setTasks(filteredTasks);
   }
 
+  function onToggleTask(id) {
+    const tasksChanged = tasks.map(task => task.id === id ? {
+      ...task,
+      isCompleted: !task.isCompleted
+    } : task)
+    setTasks(tasksChanged)
+    console.log(tasksChanged)
+  }
+
+  function quantityDoneTasks() {
+    tasks.filter(task => task.isCompleted).length
+  }
+
   return (
     <div className="App">
       <Header />
@@ -67,15 +80,15 @@ export function App() {
       </div>
       <div className={styles.todoWrapper}>
         <div className={styles.todoTexts}>
-          <div className="todoCreated">Ctreated: {tasks.length}</div>
-          <div className="todoDone">Done: { tasks.status = true}</div>
+          <div className="todoCreated">Created: {tasks.length}</div>
+          <div className="todoDone">Done: {tasks.filter(task => task.isCompleted).length}</div>
         </div>
         <hr />
 
         { tasks.length > 0 ? (
           tasks.map(task => {
             return(
-              <Task key={task.id} id={task.id} title={task.title} isCompleted={task.isCompleted} onDeleteTask={onDeleteTask} />
+              <Task key={task.id} id={task.id} title={task.title} isCompleted={task.isCompleted} onToggleTask={onToggleTask} onDeleteTask={onDeleteTask} />
             )
           } )
         ) : (

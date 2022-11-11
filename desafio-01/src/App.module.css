@@ -28,24 +28,3 @@
   text-align: center;
   margin-top: 1rem;
 }
-
-.todoList {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  margin: 1rem;
-}
-
-.todoList p {
-  padding: 0.3rem;
-  justify-content: center;
-  line-height: 5px;
-}
-
-.todoList button {
-  background: transparent;
-  border: 0;
-  color: var(--gray-400);
-  cursor: pointer;
-  line-height: 0;
-}
