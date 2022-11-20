@@ -11,9 +11,14 @@ import {
 } from './styles'
 
 export function Home() {
+
+  function handleSubmit(event) {
+
+  }
+
   return (
     <HomeContainer>
-      <form>
+      <form onSubmit={handleSubmit}>
         <FormContainer>
           <label htmlFor="task">Vou trabalhar em</label>
           <TaskInput
