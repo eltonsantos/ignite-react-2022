@@ -133,6 +133,14 @@ export function Home() {
 
   const task = watch('task')
   const isSubmitDisable = !task
+  
+  useEffect(() => {
+    if (activeCycle) {
+      document.title = `${minutes}:${seconds} - ${task} | Ignite Timer`
+    } else {
+      document.title = 'Ignite Timer'
+    }
+  }, [minutes, seconds, activeCycle])
 
   return (
     <HomeContainer>
