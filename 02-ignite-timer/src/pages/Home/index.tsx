@@ -132,7 +132,7 @@ export function Home() {
     } else {
       document.title = 'Ignite Timer'
     }
-  }, [minutes, seconds, activeCycle])
+  }, [minutes, seconds, activeCycle, task])
 
   return (
     <HomeContainer>
