@@ -103,7 +103,7 @@ export function History() {
               <td>
                 <Status statusColor="green">Concluído</Status>
               </td>
-            </tr> 
+            </tr>
           </tbody>
         </table>
       </HistoryList>
